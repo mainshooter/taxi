@@ -10,11 +10,13 @@ function weekendTime() {
   startTime = startTime.replace(":", "");
   if (startTime >= 700 && startTime <= 2200) {
     // No weekend
+    console.log("No weekend!");
     return(false);
   }
   else {
     // There is weekend
-    return(false);
+    console.log("Weekend!");
+    return(true);
   }
 }
 function checkIfDayIsWeekend() {
@@ -25,19 +27,18 @@ function checkIfDayIsWeekend() {
 
   if (datum == 5 || datum == 6 || datum == 0 || datum == 1) {
     // Check if the day is in the weekend day
-    if (datum == 5) {
+    if (datum == 5 || datum == 1) {
       // If the weekend day is 5 or one we check the time that if that is also in the weekend time
-      return(weekendTime());
-    }
-    else if (datum == 1) {
       return(weekendTime());
     }
     else {
       return(true);
+      console.log("Weekend!");
     }
   }
   else {
     // No weekend
+    console.log("No weekend");
     return(false);
   }
 }
@@ -59,10 +60,10 @@ function minuutTime(time_in_hours) {
   }
 }
 function drivePrice() {
-  // Cost per kilometer
+    // Cost per kilometer
     var kilometers = $("kilometers").value;
-    kilometers = kilometers * 1;
-    return(kilometers);
+    var price = kilometers * 1;
+    return(price);
 }
 
 function calculateCosts() {
@@ -78,6 +79,7 @@ function calculateCosts() {
   // Price per kilometer
 
   var weekend = checkIfDayIsWeekend();
+  // We check if it is weekend
 
   var price;
 
