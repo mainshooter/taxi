@@ -32,8 +32,8 @@ function checkIfDayIsWeekend() {
       return(weekendTime());
     }
     else {
-      return(true);
       console.log("Weekend!");
+      return(true);
     }
   }
   else {
@@ -90,6 +90,7 @@ function calculateCosts() {
   else if (weekend == false) {
     price = timePrice + drivePriceing;
   }
+  price = roundUpPrice(price);
   displayPrice(price);
 }
 function calculateTravealing() {
@@ -104,6 +105,11 @@ function calculateTravealing() {
   var traffleTime = endTime - startTime;
 
   return(traffleTime);
+}
+function roundUpPrice(price) {
+  // Round the price up to 2 decimals
+  price = Math.round(price * 100) / 100;
+  return(price);
 }
 function displayPrice(price) {
   $("prijs").innerHTML = price;
