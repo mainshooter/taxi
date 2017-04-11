@@ -42,10 +42,11 @@ function checkIfDayIsWeekend() {
     return(false);
   }
 }
-function minuutTime(time_in_min) {
+function minuutTime(time_in_min, startTijd) {
   // calculates the time and price
-  var startTime = $("begin_tijd").value;
-  startTime = startTime.replace(":", "");
+  var startTime = parseInt(startTijd);
+  console.log(time_in_min);
+  // startTime = startTime.replace(":", "");
 
   if (startTime >= 800 && startTime <= 1800) {
     // If the time is in the day time
@@ -65,14 +66,15 @@ function drivePrice() {
     console.log("Price for all kilometers is: " + price);
     return(price);
 }
-
 function calculateCosts() {
   // Calculate the cost
   if (validateInput() == true) {
     var time = calculateTravealing();
     // The time we are on our way
+    console.log(time);
 
-    var timePrice = minuutTime(time);
+    var timePrice = minuutTime(time[0], time[1]);
+    // traffleTime, begin_tijd
     // Price per minuut to drive
 
     var kilometers = getKilometers();
@@ -103,59 +105,70 @@ function calculateTravealing() {
   // In kilometer per uur
   var geredenKM = getKilometers();
 
-  var eind_tijd = roundUp(geredenKM / gem_snelheid);
-  console.log(eind_tijd);
+  var begin_tijd = roundUp(geredenKM / gem_snelheid);
   // We calculate the end time by the aferage speed
 
-  var startTime = $("begin_tijd").value;
+  var eindTijd = $("eind_tijd").value;
 
-  startTime = startTime.replace(":", "");
+  eindTijd = eindTijd.replace(":", "");
+  // eindTijd = split.eindTijd("");
   // Converting the time to something we can calculate with
 
-  var array = stringToArray(startTime);
+
+  var array = stringToArray(eindTijd);
   if (typeof(array[3]) == 'undefined') {
     // Check if the array hasn't 2 time stamps for the hour
     // Because the hour will only be in the first array position
-    var startTimeInHour = array[0];
-    startTimeInHour = parseInt(startTimeInHour);
+    var eindTijdInHour = array[0];
+    eindTijdInHour = parseInt(eindTijdInHour);
 
-    var startTimeInMin = array[1];
-    startTimeInMin += array[2];
-    startTimeInMin = parseInt(startTimeInMin);
+    // Because we only use ours in y
+    begin_tijd = parseInt(begin_tijd);
+
+    var eindTijdInMin = array[1];
+    eindTijdInMin += array[2];
+    eindTijdInMin = parseInt(eindTijdInMin);
+
+    var begin_tijd = (((eindTijdInHour * 60) + eindTijdInMin) - (begin_tijd * 60));
   }
   else {
-    var startTimeInHour = array[0];
-    startTimeInHour += array[1];
-    startTimeInHour = parseInt(startTimeInHour);
+    var eindTijdInHour = array[0];
+    eindTijdInHour += array[1];
+    eindTijdInHour = parseInt(eindTijdInHour);
 
-    var startTimeInMin = array[2];
-    startTimeInMin += array[3];
-    startTimeInMin = parseInt(startTimeInMin);
+    var begin_tijd = (((eindTijdInHour * 60) + eindTijdInMin) - (begin_tijd * 60));
+    begin_tijd = parseInt(begin_tijd);
+    begin_tijd = begin_tijd;
+
+    var eindTijdInMin = array[2];
+    eindTijdInMin += array[3];
     // Converting the string as time to a array so we separete the hour and minuuts
     // After we combine them back we do a parseINT so we can do math with it
   }
-
+  endTime = (parseFloat(eindTijdInHour) * 60) + parseFloat(eindTijdInMin);
 
 
   // Converting hours to minuuts and add the minuuts
-  startTime = (startTimeInHour * 60) + startTimeInMin;
-  endTime = (eind_tijd * 60) + startTime;
-  console.log(endTime);
 
-  var traffleTime = endTime - startTime;
+  console.log("End time: " + endTime);
+  console.log("Begin time: " + begin_tijd);
+
+  var traffleTime =  endTime - begin_tijd;
   console.log("Traffel time " + traffleTime);
   // The total traffel time
+
+  traffleTime = [traffleTime, begin_tijd]
 
   return(traffleTime);
 }
 function validateInput() {
   // This function checks if all input fields are filled in
   var km = $("kilometers").value;
-  var start = $("begin_tijd").value;
+  var end = $("eind_tijd").value;
   // var eind = $("eind_tijd").value;
   var date = $("vertrek_datum").value;
 
-  if (km > '' && start > '' && date > '' && date != 'dd-mm-jjjj') {
+  if (km > '' && end > '' && date > '' && date != 'dd-mm-jjjj') {
     return(true);
   }
   else {
