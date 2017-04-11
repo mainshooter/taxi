@@ -101,10 +101,64 @@ function calculateTravealing() {
   startTime = startTime.replace(":", "");
   endTime = endTime.replace(":", "");
   // Converting the time to something we can calculate with
+// 8:00
+// 10:00
+// Datum pakken
+  var array = stringToArray(startTime);
+  if (typeof(array[3]) == 'undefined') {
+    var startTimeInHour = array[0];
+    startTimeInHour = parseInt(startTimeInHour);
+
+    var startTimeInMin = array[1];
+    startTimeInMin += array[2];
+    startTimeInMin = parseInt(startTimeInMin);
+  }
+  else {
+    var startTimeInHour = array[0];
+    startTimeInHour += array[1];
+    startTimeInHour = parseInt(startTimeInHour);
+
+    var startTimeInMin = array[2];
+    startTimeInMin += array[3];
+    startTimeInMin = parseInt(startTimeInMin);
+    // Converting the string as time to a array so we separete the hour and minuuts
+    // After we combine them back we do a parseINT so we can do math with it
+  }
+  console.log(startTimeInHour);
+
+  array = stringToArray(endTime);
+  if (typeof(array[3]) == 'undefined') {
+    var endTimeInHours = array[0];
+    endTimeInHours = parseInt(endTimeInHours);
+    var endTimeInMin = array[1];
+    endTimeInMin += array[2];
+    endTimeInMin = parseInt(endTimeInMin);
+  }
+  else {
+    var endTimeInHours = array[0];
+    endTimeInHours += array[1];
+    endTimeInHours = parseInt(endTimeInHours);
+
+    var endTimeInMin = array[2];
+    endTimeInMin += array[3];
+    endTimeInMin = parseInt(endTimeInMin);
+  }
+
+
+  endTime = (endTimeInHours * 60) + endTimeInMin;
+  // Converting hours to minuuts and add the minuuts
+  startTime = (startTimeInHour * 60) + startTimeInMin;
+
+  console.log(endTime - startTime);
 
   var traffleTime = endTime - startTime;
+  // The total traffel time
 
   return(traffleTime);
+}
+function stringToArray(string) {
+  var array = string.split("");
+  return(array);
 }
 function roundUpPrice(price) {
   // Round the price up to 2 decimals
@@ -112,7 +166,7 @@ function roundUpPrice(price) {
   return(price);
 }
 function displayPrice(price) {
-  $("prijs").innerHTML = price;
+  $("prijs").innerHTML = "&euro;"+ price;
 }
 function $(element) {
   // Get a element by a ID
