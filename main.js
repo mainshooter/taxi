@@ -42,21 +42,15 @@ function checkIfDayIsWeekend() {
     return(false);
   }
 }
-function minuutTime(time_in_hours) {
+function minuutTime(time_in_min) {
   // calculates the time and price
-  var startTime = $("begin_tijd").value;
-  var endTime = $("eind_tijd").value;
-
-  startTime = startTime.replace(":", "");
-  endTime = endTime.replace(":", "");
-
   if (startTime >= 800 && startTime <= 1800) {
     // If the time is in the day time
-    return(time_in_hours * 0.25);
+    return(time_in_min * 0.25);
   }
   else {
     // If it is night
-    return(time_in_hours * 0.45);
+    return(time_in_min * 0.45);
   }
 }
 function drivePrice() {
@@ -101,11 +95,11 @@ function calculateTravealing() {
   startTime = startTime.replace(":", "");
   endTime = endTime.replace(":", "");
   // Converting the time to something we can calculate with
-// 8:00
-// 10:00
-// Datum pakken
+
   var array = stringToArray(startTime);
   if (typeof(array[3]) == 'undefined') {
+    // Check if the array hasn't 2 time stamps for the hour
+    // Because the hour will only be in the first array position
     var startTimeInHour = array[0];
     startTimeInHour = parseInt(startTimeInHour);
 
@@ -124,7 +118,6 @@ function calculateTravealing() {
     // Converting the string as time to a array so we separete the hour and minuuts
     // After we combine them back we do a parseINT so we can do math with it
   }
-  console.log(startTimeInHour);
 
   array = stringToArray(endTime);
   if (typeof(array[3]) == 'undefined') {
@@ -148,8 +141,6 @@ function calculateTravealing() {
   endTime = (endTimeInHours * 60) + endTimeInMin;
   // Converting hours to minuuts and add the minuuts
   startTime = (startTimeInHour * 60) + startTimeInMin;
-
-  console.log(endTime - startTime);
 
   var traffleTime = endTime - startTime;
   // The total traffel time
