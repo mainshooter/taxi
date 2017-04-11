@@ -49,10 +49,12 @@ function minuutTime(time_in_min) {
 
   if (startTime >= 800 && startTime <= 1800) {
     // If the time is in the day time
+    console.log("Kosten voor de minuten zijn: " + time_in_min * 0.25);
     return(time_in_min * 0.25);
   }
   else {
     // If it is night
+    console.log("Kosten voor de minuten zijn: " + time_in_min * 0.45);
     return(time_in_min * 0.45);
   }
 }
@@ -60,6 +62,7 @@ function drivePrice() {
     // Cost per kilometer
     var kilometers = $("kilometers").value;
     var price = kilometers * 1;
+    console.log("Price for all kilometers is: " + price);
     return(price);
 }
 
@@ -74,7 +77,7 @@ function calculateCosts() {
 
     var kilometers = getKilometers();
     var drivePriceing = drivePrice(kilometers);
-    // Price per kilometer
+    // Price for the kilometers
 
     var weekend = checkIfDayIsWeekend();
     // We check if it is weekend
@@ -84,6 +87,7 @@ function calculateCosts() {
     if (weekend == true) {
       price = timePrice + drivePriceing;
       price = price * 1.15;
+      console.log("The end price is: " + price);
     }
     else if (weekend == false) {
       price = timePrice + drivePriceing;
@@ -99,7 +103,9 @@ function calculateTravealing() {
   // In kilometer per uur
   var geredenKM = getKilometers();
 
-  var eind_tijd = geredenKM / gem_snelheid;
+  var eind_tijd = roundUp(geredenKM / gem_snelheid);
+  console.log(eind_tijd);
+  // We calculate the end time by the aferage speed
 
   var startTime = $("begin_tijd").value;
 
@@ -134,8 +140,10 @@ function calculateTravealing() {
   // Converting hours to minuuts and add the minuuts
   startTime = (startTimeInHour * 60) + startTimeInMin;
   endTime = (eind_tijd * 60) + startTime;
+  console.log(endTime);
 
   var traffleTime = endTime - startTime;
+  console.log("Traffel time " + traffleTime);
   // The total traffel time
 
   return(traffleTime);
@@ -164,7 +172,7 @@ function roundUpPrice(price) {
   return(price);
 }
 function roundUp(input) {
-  input = Math.round(input);
+  input = Math.ceil(input);
   return(input);
 }
 function displayPrice(price) {
