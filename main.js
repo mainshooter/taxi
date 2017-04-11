@@ -44,6 +44,9 @@ function checkIfDayIsWeekend() {
 }
 function minuutTime(time_in_min) {
   // calculates the time and price
+  var startTime = $("begin_tijd").value;
+  startTime = startTime.replace(":", "");
+
   if (startTime >= 800 && startTime <= 1800) {
     // If the time is in the day time
     return(time_in_min * 0.25);
@@ -62,38 +65,45 @@ function drivePrice() {
 
 function calculateCosts() {
   // Calculate the cost
-  var time = calculateTravealing();
-  // The time we are on our way
+  if (validateInput() == true) {
+    var time = calculateTravealing();
+    // The time we are on our way
 
-  var timePrice = minuutTime(time);
-  // Price per minuut to drive
+    var timePrice = minuutTime(time);
+    // Price per minuut to drive
 
-  var kilometers = getKilometers();
-  var drivePriceing = drivePrice(kilometers);
-  // Price per kilometer
+    var kilometers = getKilometers();
+    var drivePriceing = drivePrice(kilometers);
+    // Price per kilometer
 
-  var weekend = checkIfDayIsWeekend();
-  // We check if it is weekend
+    var weekend = checkIfDayIsWeekend();
+    // We check if it is weekend
 
-  var price;
+    var price;
 
-  if (weekend == true) {
-    price = timePrice + drivePriceing;
-    price = price * 1.15;
+    if (weekend == true) {
+      price = timePrice + drivePriceing;
+      price = price * 1.15;
+    }
+    else if (weekend == false) {
+      price = timePrice + drivePriceing;
+    }
+    price = roundUpPrice(price);
+    displayPrice(price);
   }
-  else if (weekend == false) {
-    price = timePrice + drivePriceing;
-  }
-  price = roundUpPrice(price);
-  displayPrice(price);
 }
 function calculateTravealing() {
   // We calculate the time we are traffeling
+
+  var gem_snelheid = 60;
+  // In kilometer per uur
+  var geredenKM = getKilometers();
+
+  var eind_tijd = geredenKM / gem_snelheid;
+
   var startTime = $("begin_tijd").value;
-  var endTime = $("eind_tijd").value;
 
   startTime = startTime.replace(":", "");
-  endTime = endTime.replace(":", "");
   // Converting the time to something we can calculate with
 
   var array = stringToArray(startTime);
@@ -119,33 +129,30 @@ function calculateTravealing() {
     // After we combine them back we do a parseINT so we can do math with it
   }
 
-  array = stringToArray(endTime);
-  if (typeof(array[3]) == 'undefined') {
-    var endTimeInHours = array[0];
-    endTimeInHours = parseInt(endTimeInHours);
-    var endTimeInMin = array[1];
-    endTimeInMin += array[2];
-    endTimeInMin = parseInt(endTimeInMin);
-  }
-  else {
-    var endTimeInHours = array[0];
-    endTimeInHours += array[1];
-    endTimeInHours = parseInt(endTimeInHours);
-
-    var endTimeInMin = array[2];
-    endTimeInMin += array[3];
-    endTimeInMin = parseInt(endTimeInMin);
-  }
 
 
-  endTime = (endTimeInHours * 60) + endTimeInMin;
   // Converting hours to minuuts and add the minuuts
   startTime = (startTimeInHour * 60) + startTimeInMin;
+  endTime = (eind_tijd * 60) + startTime;
 
   var traffleTime = endTime - startTime;
   // The total traffel time
 
   return(traffleTime);
+}
+function validateInput() {
+  // This function checks if all input fields are filled in
+  var km = $("kilometers").value;
+  var start = $("begin_tijd").value;
+  // var eind = $("eind_tijd").value;
+  var date = $("vertrek_datum").value;
+
+  if (km > '' && start > '' && date > '' && date != 'dd-mm-jjjj') {
+    return(true);
+  }
+  else {
+    return(false);
+  }
 }
 function stringToArray(string) {
   var array = string.split("");
@@ -155,6 +162,10 @@ function roundUpPrice(price) {
   // Round the price up to 2 decimals
   price = Math.round(price * 100) / 100;
   return(price);
+}
+function roundUp(input) {
+  input = Math.round(input);
+  return(input);
 }
 function displayPrice(price) {
   $("prijs").innerHTML = "&euro;"+ price;
